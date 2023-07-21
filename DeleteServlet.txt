@@ -1,0 +1,65 @@
+package com.app.controller;
+import com.app.dao.*;
+import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class DeleteServlet
+ */
+@WebServlet("/DeleteServlet")
+public class DeleteServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+	private DataAccess access;
+    public DeleteServlet() {
+        access=new DataAccess();
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@SuppressWarnings("unused")
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int rollno=Integer.parseInt(request.getParameter("rollno"));
+		String delete=request.getParameter("delete");
+		if(delete.equals("request"))
+		{
+			String[] record=null;
+			try {
+				access.getStu(rollno);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(delete!=null)
+			{
+				request.setAttribute("record", record);
+				RequestDispatcher rd=request.getRequestDispatcher("deleteform.jsp");
+				rd.forward(request, response);
+			}
+			else
+			{
+				response.sendRedirect("StudentServlet");
+			}
+		}
+		else
+		{
+			int count=access.deleteStu(rollno);
+			response.sendRedirect("StudentServlet");
+		}
+	}
+	
+}
+
+
+Write me a program of JSP JDBC and Servlet for the fees details button that should retrieve the roll no data from database which is i have already established foreign key relationship in mysql and display the fees details in fees.jsp alotted fees of "1,00,000" readonly and amount paid textbox and amount due text box and buttons of pay now ,update, cancel when i click pay now it should redirect to paynow.jsp and there amount to pay textbox when i enter the amount and click pay the amount should be added to amount paid and amount due should be reduced automatically and when i click the update button i should be able to update the above details give me an appropriate code of JDBC ,JSP and servlet code seperately
